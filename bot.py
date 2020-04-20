@@ -18,14 +18,14 @@ token = os.getenv("TOKEN")
 # bot functions
 
 if mode == "dev":
-    def run(Updater):
-        Updater.start_polling()
+    def run(updater):
+        updater.start_polling()
 elif mode == "prod":
-    def run(Updater):
+    def run(updater):
         PORT = int(os.environ.get("PORT", "8779"))
         app_name = os.environ.get("app_name")
-        Updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=token)
-        Updater.bot.set_webhook("https://{}.herokuapp.com/{}".format(app_name, token))
+        updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=token)
+        updater.bot.set_webhook("https://{}.herokuapp.com/{}".format(app_name, token))
 else:
     logger.error("No MODE specified.")
     sys.exit(1)
@@ -34,7 +34,17 @@ else:
 
 def start_handler(bot, update):
     logger.info("User {} has started the bot.".format(update.efective_user["id"]))
-    update.message.reply_text("This Bot will immediately delete the messages from users if they send more messages than they are allowed in a particular time-frame."
-    "Add this bot to the Group, give it the required permissions, and send /ainzsama to get the Bot working in your Group. The settings can be configured in this chat with /config command.")
+    update.message.reply_text("This Bot will immediately delete the messages from users if they send more messages than they are allowed in a particular time-frame. Add this bot to the Group, give it the required permissions, and send /ainzsama to get the Bot working in your Group. The settings can be configured in this chat with /config command.")
 
 #def for /config command
+
+# running the bot
+
+if __name__ == '__main__':
+    logger.info("Starting the Bot")
+    updater = Updater(token)
+
+    updater.dispatcher.add_handler(CommandHandler("start", start_handler))
+    # updater.dispatcher.add_handler(CommandHandler(""))
+
+    run(updater)
