@@ -1,0 +1,3 @@
+~ $ ls
+Dockerfile  README.md  members.csv   new_message_logs.csv
+LICENSE     bot.py     members_list  old_message_logs.csv
